@@ -30,22 +30,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //       appBar: AppBar(
-  //         title: Text(widget.title),
-  //       ),
-  //       body: LayoutBuilder(builder: (context, constraints) {
-  //         // WidgetsBinding.instance
-  //         //   .addPostFrameCallback((_) => zoomableOverlay.show(context));
-  //         return Center(
-  //             child: ZoomOverlay(
-  //                 child: CachedNetworkImage(
-  //                     imageUrl: 'https://picsum.photos/800')));
-  //       }));
-  // }
-
   Widget listRow(int row) {
     return Column(children: <Widget>[
       ZoomOverlay(

@@ -61,7 +61,6 @@ class _ZoomOverlayState extends State<ZoomOverlay>
   Animation<Matrix4> _animationReset;
   AnimationController _controllerReset;
   OverlayEntry _overlayEntry;
-  OverlayState _overlayState;
   bool _isZooming = false;
   int _touchCount = 0;
   Matrix4 _transformMatrix = Matrix4.identity();
@@ -175,9 +174,9 @@ class _ZoomOverlayState extends State<ZoomOverlay>
 
   void show(BuildContext context) async {
     if (!_isZooming) {
-      _overlayState = Overlay.of(context);
+      OverlayState overlayState = Overlay.of(context);
       _overlayEntry = new OverlayEntry(builder: _build);
-      _overlayState.insert(_overlayEntry);
+      overlayState.insert(_overlayEntry);
     }
   }
 
