@@ -1,9 +1,9 @@
 # zoom_pinch
 
-A instragram style pinch and zoom widget
+A instragram style pinch and zoom widget for iOS and Android projects. 
 
 ## Getting Started
 
-Enables an image to be dragged out of the widget tree moved around and zoomed abwhilst sitting over all other widgets.
+This project was created with the beta version of flutter, that has web support, although the ZoomOverlay widget only works on Android or iOS.
 
 Video of the app running is available [here](https://youtu.be/cqQSb-6AoWY).

@@ -43,9 +43,11 @@ class _TransformWidgetState extends State<TransformWidget> {
 //
 class ZoomOverlay extends StatefulWidget {
   final Widget child;
+  final bool twoTouchOnly;
 
   const ZoomOverlay({
     Key key,
+    @required this.twoTouchOnly,
     @required this.child,
   })  : assert(child != null),
         super(key: key);
@@ -107,7 +109,7 @@ class _ZoomOverlayState extends State<ZoomOverlay>
   }
 
   void onScaleStart(ScaleStartDetails details, BuildContext context) {
-    if (_touchCount < 2) return;
+    if (widget.twoTouchOnly && _touchCount < 2) return;
     _startFocalPoint = details.focalPoint;
     _matrix = Matrix4.identity();
 

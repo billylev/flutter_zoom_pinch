@@ -33,6 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget listRow(int row) {
     return Column(children: <Widget>[
       ZoomOverlay(
+          twoTouchOnly: true,
           child: Padding(
               padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
               child: CachedNetworkImage(
