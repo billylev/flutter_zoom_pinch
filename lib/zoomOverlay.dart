@@ -23,12 +23,10 @@ class _TransformWidgetState extends State<TransformWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _matrix != null
-        ? Transform(
-            transform: (widget.matrix * _matrix),
-            child: widget.child,
-          )
-        : Container();
+    return Transform(
+      transform: (widget.matrix * _matrix),
+      child: widget.child,
+    );
   }
 
   void setMatrix(Matrix4 matrix) {
