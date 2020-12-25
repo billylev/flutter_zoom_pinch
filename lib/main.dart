@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:zoom_pinch/zoomOverlay.dart';
+import 'package:flutter_zoom_pinch/zoomOverlay.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,38 +32,101 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Widget listRow(int row) {
-    return Column(children: <Widget>[
-      ZoomOverlay(
-          twoTouchOnly: true,
-          child: Padding(
-              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+  Widget listRow(int profile, int image, int likes, String name, String text) {
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(children: [
+              CircleAvatar(
+                backgroundImage:
+                    NetworkImage('https://picsum.photos/800?image=$profile'),
+              ),
+              SizedBox(width: 8),
+              Text(name)
+            ]),
+          ),
+          ZoomOverlay(
+              twoTouchOnly: true,
               child: CachedNetworkImage(
-                  imageUrl: 'https://picsum.photos/800?image=' +
-                      (100 + row).toString()))),
-      Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-          child: Container(
-            height: 150,
-            color: Colors.grey[200],
-            child: const Center(child: Text('Image')),
-          )),
-      SizedBox(height: 10)
-    ]);
+                  imageUrl: 'https://picsum.photos/800?image=$image')),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(children: [
+                    FaIcon(
+                      FontAwesomeIcons.heart,
+                      color: Colors.black54,
+                    ),
+                    SizedBox(width: 16),
+                    FaIcon(
+                      FontAwesomeIcons.comment,
+                      color: Colors.black54,
+                    ),
+                    SizedBox(width: 16),
+                    FaIcon(
+                      FontAwesomeIcons.paperPlane,
+                      color: Colors.black54,
+                    ),
+                  ]),
+                  FaIcon(
+                    FontAwesomeIcons.bookmark,
+                    color: Colors.black54,
+                  )
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                child: Text('$likes likes'),
+              ),
+              RichText(
+                  text: TextSpan(
+                      text: name,
+                      style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
+                      children: <TextSpan>[
+                    TextSpan(
+                      text: ' ' + text,
+                      style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal),
+                    )
+                  ]))
+            ]),
+          ),
+          SizedBox(height: 10)
+        ]);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
-        ),
+            brightness: Brightness.light,
+            backgroundColor: Colors.white,
+            centerTitle: false,
+            title: Text('Instagram',
+                style: GoogleFonts.cookie(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.black87,
+                    fontSize: 38))),
         body: ListView(
           children: <Widget>[
-            listRow(1),
-            listRow(2),
-            listRow(3),
-            listRow(4),
+            listRow(1027, 1062, 36, 'mary.porter',
+                'Lucy doesnt want to get out of bed today, its far too cold for the little darling.'),
+            listRow(324, 557, 65, 'paul.bishop',
+                'Looks like its going to be a rough crossing.'),
+            listRow(453, 585, 29, 'mel_fortwright',
+                'The stands are packed, this is going to be a good game !'),
+            listRow(64, 653, 18, 'robDavidJuiceMan', 'My office for day.'),
           ],
         ));
   }
