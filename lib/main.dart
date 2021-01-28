@@ -48,6 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ]),
           ),
           ZoomOverlay(
+              minScale: 0.5, // optional
+              maxScale: 3.0, // optional
               twoTouchOnly: true,
               child: CachedNetworkImage(
                   imageUrl: 'https://picsum.photos/800?image=$image')),

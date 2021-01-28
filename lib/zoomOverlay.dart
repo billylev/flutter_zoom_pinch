@@ -42,12 +42,16 @@ class _TransformWidgetState extends State<TransformWidget> {
 class ZoomOverlay extends StatefulWidget {
   final Widget child;
   final bool twoTouchOnly;
+  final double minScale;
+  final double maxScale;
 
-  const ZoomOverlay({
-    Key key,
-    @required this.twoTouchOnly,
-    @required this.child,
-  })  : assert(child != null),
+  const ZoomOverlay(
+      {Key key,
+      @required this.twoTouchOnly,
+      @required this.child,
+      this.minScale,
+      this.maxScale})
+      : assert(child != null),
         super(key: key);
 
   @override
@@ -136,11 +140,19 @@ class _ZoomOverlayState extends State<ZoomOverlay>
     Offset focalPoint =
         renderBox.globalToLocal(details.focalPoint - translationDelta);
 
-    var dx = (1 - details.scale) * focalPoint.dx;
-    var dy = (1 - details.scale) * focalPoint.dy;
+    var scaleby = details.scale;
+    if (this.widget.minScale != null && scaleby < this.widget.minScale) {
+      scaleby = this.widget.minScale;
+    }
+    if (this.widget.maxScale != null && scaleby > this.widget.maxScale) {
+      scaleby = this.widget.maxScale;
+    }
 
-    Matrix4 scale = Matrix4(details.scale, 0, 0, 0, 0, details.scale, 0, 0, 0,
-        0, 1, 0, dx, dy, 0, 1);
+    var dx = (1 - scaleby) * focalPoint.dx;
+    var dy = (1 - scaleby) * focalPoint.dy;
+
+    Matrix4 scale =
+        Matrix4(scaleby, 0, 0, 0, 0, scaleby, 0, 0, 0, 0, 1, 0, dx, dy, 0, 1);
 
     _matrix = translate * scale;
 
