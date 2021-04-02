@@ -10,16 +10,15 @@ class TransformWidget extends StatefulWidget {
   final Widget child;
   final Matrix4 matrix;
 
-  const TransformWidget({Key key, @required this.child, @required this.matrix})
-      : assert(child != null),
-        super(key: key);
+  const TransformWidget({Key? key, required this.child, required this.matrix})
+      : super(key: key);
 
   @override
   _TransformWidgetState createState() => _TransformWidgetState();
 }
 
 class _TransformWidgetState extends State<TransformWidget> {
-  Matrix4 _matrix = Matrix4.identity();
+  Matrix4? _matrix = Matrix4.identity();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,7 @@ class _TransformWidgetState extends State<TransformWidget> {
     );
   }
 
-  void setMatrix(Matrix4 matrix) {
+  void setMatrix(Matrix4? matrix) {
     setState(() {
       _matrix = matrix;
     });
@@ -42,17 +41,16 @@ class _TransformWidgetState extends State<TransformWidget> {
 class ZoomOverlay extends StatefulWidget {
   final Widget child;
   final bool twoTouchOnly;
-  final double minScale;
-  final double maxScale;
+  final double? minScale;
+  final double? maxScale;
 
   const ZoomOverlay(
-      {Key key,
-      @required this.twoTouchOnly,
-      @required this.child,
+      {Key? key,
+      required this.twoTouchOnly,
+      required this.child,
       this.minScale,
       this.maxScale})
-      : assert(child != null),
-        super(key: key);
+      : super(key: key);
 
   @override
   _ZoomOverlayState createState() => _ZoomOverlayState();
@@ -60,11 +58,11 @@ class ZoomOverlay extends StatefulWidget {
 
 class _ZoomOverlayState extends State<ZoomOverlay>
     with TickerProviderStateMixin {
-  Matrix4 _matrix = Matrix4.identity();
-  Offset _startFocalPoint;
-  Animation<Matrix4> _animationReset;
-  AnimationController _controllerReset;
-  OverlayEntry _overlayEntry;
+  Matrix4? _matrix = Matrix4.identity();
+  late Offset _startFocalPoint;
+  late Animation<Matrix4> _animationReset;
+  late AnimationController _controllerReset;
+  OverlayEntry? _overlayEntry;
   bool _isZooming = false;
   int _touchCount = 0;
   Matrix4 _transformMatrix = Matrix4.identity();
@@ -80,7 +78,7 @@ class _ZoomOverlayState extends State<ZoomOverlay>
         AnimationController(vsync: this, duration: Duration(milliseconds: 100));
 
     _controllerReset.addListener(() {
-      _transformWidget.currentState.setMatrix(_animationReset.value);
+      _transformWidget.currentState!.setMatrix(_animationReset.value);
     });
 
     _controllerReset.addStatusListener((status) {
@@ -116,7 +114,7 @@ class _ZoomOverlayState extends State<ZoomOverlay>
     _matrix = Matrix4.identity();
 
     // create an matrix of where the image is on the screen for the overlay
-    RenderBox renderBox = context.findRenderObject();
+    RenderBox renderBox = context.findRenderObject() as RenderBox;
     Offset position = renderBox.localToGlobal(Offset.zero);
     _transformMatrix =
         Matrix4.translation(Vector3(position.dx, position.dy, 0));
@@ -136,19 +134,19 @@ class _ZoomOverlayState extends State<ZoomOverlay>
     Matrix4 translate = Matrix4.translation(
         Vector3(translationDelta.dx, translationDelta.dy, 0));
 
-    RenderBox renderBox = context.findRenderObject();
+    RenderBox renderBox = context.findRenderObject() as RenderBox;
     Offset focalPoint =
         renderBox.globalToLocal(details.focalPoint - translationDelta);
 
-    var scaleby = details.scale;
-    if (this.widget.minScale != null && scaleby < this.widget.minScale) {
+    double? scaleby = details.scale;
+    if (this.widget.minScale != null && scaleby < this.widget.minScale!) {
       scaleby = this.widget.minScale;
     }
-    if (this.widget.maxScale != null && scaleby > this.widget.maxScale) {
+    if (this.widget.maxScale != null && scaleby! > this.widget.maxScale!) {
       scaleby = this.widget.maxScale;
     }
 
-    var dx = (1 - scaleby) * focalPoint.dx;
+    var dx = (1 - scaleby!) * focalPoint.dx;
     var dy = (1 - scaleby) * focalPoint.dy;
 
     Matrix4 scale =
@@ -156,8 +154,8 @@ class _ZoomOverlayState extends State<ZoomOverlay>
 
     _matrix = translate * scale;
 
-    if (_transformWidget != null && _transformWidget.currentState != null) {
-      _transformWidget.currentState.setMatrix(_matrix);
+    if (_transformWidget.currentState != null) {
+      _transformWidget.currentState!.setMatrix(_matrix);
     }
   }
 
@@ -186,9 +184,9 @@ class _ZoomOverlayState extends State<ZoomOverlay>
 
   void show(BuildContext context) async {
     if (!_isZooming) {
-      OverlayState overlayState = Overlay.of(context);
+      OverlayState overlayState = Overlay.of(context)!;
       _overlayEntry = new OverlayEntry(builder: _build);
-      overlayState.insert(_overlayEntry);
+      overlayState.insert(_overlayEntry!);
     }
   }
 
@@ -197,7 +195,7 @@ class _ZoomOverlayState extends State<ZoomOverlay>
       _isZooming = false;
     });
 
-    _overlayEntry.remove();
+    _overlayEntry!.remove();
     _overlayEntry = null;
   }
 
